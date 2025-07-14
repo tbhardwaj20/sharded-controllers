@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: go-sharded-controller
+  labels:
+    app: go-sharded-controller
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: go-sharded-controller
+  template:
+    metadata:
+      labels:
+        app: go-sharded-controller
+        shard.alpha.sharding.timebertt.dev/go-controller-ring: go-sharded-controller
+    spec:
+      serviceAccountName: sharder
+      containers:
+        - name: controller
+          image: tusharregistry.azurecr.io/go-sharded-controller:latest
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: LEASE_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace

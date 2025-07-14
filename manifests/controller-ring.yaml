@@ -1,0 +1,8 @@
+apiVersion: sharding.timebertt.dev/v1alpha1
+kind: ControllerRing
+metadata:
+  name: go-controller-ring
+spec:
+  resources:
+    - group: ""
+      resource: pods
